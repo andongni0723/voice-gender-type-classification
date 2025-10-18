@@ -1,14 +1,13 @@
 # Voice Gender Type Classification
 
-> Classify the voice gender to use deep learning model.
+> 使用深度學習模型對語音性別進行分類。
 
-## Tech stacks
+## 技術棧 
+* 語音預處理 
+* 數據標註
+* 模型訓練
 
-* Voice preprocess
-* Data labeling
-* Model training
-
-## Project Structure
+## 項目結構
 
 ```
 voice-gender-type-classification/
@@ -25,7 +24,7 @@ voice-gender-type-classification/
 └── README.md           # You are here
 ```
 
-## Running project 
+## 運行項目
 
 Fist, clone the Repository to your device.
 

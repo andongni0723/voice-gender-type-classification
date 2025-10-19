@@ -30,7 +30,7 @@ voice-gender-type-classification/
 Fist, clone the Repository to your device.
 
 ```bash
-git clone https://github.com/<your-name>/voice-gender-type-classification.git
+git clone https://github.com/andongni0723/voice-gender-type-classification.git
 cd voice-gender-type-classification
 ```
 

@@ -44,7 +44,7 @@ please make sure your already installed it.
 
 * Window
     ```bash
-    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
     ```
 
 This command will create a virtual environment (`.venv`) and install all required packages specified in `pyproject.toml`.

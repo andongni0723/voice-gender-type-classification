@@ -31,21 +31,17 @@ label_simplifier = {MALE_LABEL: 'male', FEMALE_LABEL: 'female'}
 
 
 def _voices_labeling_process(
-    output_path: str,
+    output_dir: Path,
     voices_tsv: Path,
     clips_dir: Path,
     count: int = 1000,
     tag: Literal['Train', 'Test'] = 'train',
 ) -> str:
     """ Process data labeling. (處理資料標註)
-    :param output_path:
-    :param voices_tsv:
-    :param clips_dir:
-    :param count:
-    :param tag:
-    :return:
+    :param output_path: like '/data/xxx'
+    :param count: labeling count.
+    :return: result logs.
     """
-    output_dir = Path(output_path)
     male_voices_dir = output_dir / 'male_voices'
     female_voices_dir = output_dir / 'female_voices'
     for d in (male_voices_dir, female_voices_dir):
@@ -110,8 +106,10 @@ def _main(input_source_path: str | None = None, count: int = 1000) -> str:
     check_list = (voices_dir, clips_dir, train_tsv, test_tsv)
     if not all(p.exists() for p in check_list): return PATH_VALID_ERROR
 
-    _voices_labeling_process(output_path='data/train', voices_tsv=train_tsv, clips_dir=clips_dir, count=count, tag='Train')
-    _voices_labeling_process(output_path='data/test', voices_tsv=test_tsv, clips_dir=clips_dir, count=count, tag='Test')
+    _voices_labeling_process(output_dir=Path('data/train'),
+                             voices_tsv=train_tsv, clips_dir=clips_dir, count=count, tag='Train')
+    _voices_labeling_process(output_dir=Path('data/test'),
+                             voices_tsv=test_tsv, clips_dir=clips_dir, count=count, tag='Test')
 
     # output_train_tsv(result)
     return f'All completed!'

@@ -4,8 +4,8 @@ import librosa
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from data_collection import VoiceSample, VoiceDataset
-from spec_process import SpectrogramProcessor
+from src.data_collection import VoiceSample, VoiceDataset
+from src.spec_process import SpectrogramProcessor
 
 
 class DataManager:
@@ -15,7 +15,7 @@ class DataManager:
         self.total_count = total_count
 
     def _load_file_list(self) -> list[tuple[str, Literal['male', 'female']]]:
-        from data_io import import_voice_with_filename_and_label
+        from src.data_io import import_voice_with_filename_and_label
         return import_voice_with_filename_and_label(self.data_dir, self.total_count)
 
     def build_samples(self) -> list[VoiceSample]:

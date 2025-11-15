@@ -6,7 +6,7 @@ import torch
 from torch import Tensor
 from torch.utils.data import Dataset
 
-from spec_process import SpectrogramProcessor
+from src.spec_process import SpectrogramProcessor
 
 
 @dataclass(frozen=True)

@@ -35,7 +35,6 @@ class SpectrogramProcessor:
             return spec[:, :self.target_frames]
 
     def transform_to_tensor(self, y: np.array) -> Tensor:
-        print(type(y))
         spec = self.waveform_to_mel(y)
         spec = self.pad_or_truncate(spec)
         return torch.from_numpy(spec).float().unsqueeze(0)  # shape (1, H, W)

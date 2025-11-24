@@ -9,7 +9,7 @@ def print_confusion_matrix(model: nn.Module, test_loader: DataLoader, device: st
     y_true, y_pred = [], []
     with torch.no_grad():
         for bx, by in test_loader:
-            p = model(bx.to(device)).argma(1).cpu()
+            p = model(bx.to(device)).argmax(1).cpu()
             y_true += by.tolist()
             y_pred += p.tolist()
     print(classification_report(y_true, y_pred, target_names=['male', 'female']))

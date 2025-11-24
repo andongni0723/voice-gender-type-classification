@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import torch.cuda
 import torch.nn.functional as F
 from torch import nn, Tensor
@@ -99,3 +101,8 @@ def train_with_dataloader(
 
     print('Train done!')
     return cnn_model
+
+def save_model(out_path: Path, model: nn.Module, verbose: bool = True) -> None:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(model.state_dict(), out_path)
+    if verbose: print(f'Model saved to: {out_path}')

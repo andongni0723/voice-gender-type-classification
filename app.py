@@ -10,22 +10,28 @@ from src.model import VoiceClassifyModel
 from src.spec_process import SpectrogramProcessor
 from src.train import device_detected
 
+MODELS_DIR = 'model/'
 
-def load_saved_model(model_path: Path) -> tuple[VoiceClassifyModel, torch.device]:
+
+def load_saved_model(model_path: Path, device: torch.device) -> VoiceClassifyModel:
     """ Load the model state dict from **model_path**
     :param model_path: tht model state path
-    :return: the model that pretrained and user device
+    :return: the model that pretrained
     """
-    device = torch.device(device_detected())
     state_dict = torch.load(model_path, map_location=device, weights_only=True)
     model = VoiceClassifyModel(classify_class=2)
     model.load_state_dict(state_dict)
     model.to(device)
     model.eval()
-    return model, device
+    return model
 
-def read_all_model():
-    ...
+def read_all_model(models_dir: Path) -> list[Path]:
+    """ Read the `*.pth` in the provided direction.
+    :param models_dir: The models folder
+    :return: The list contains all .pth file.
+    """
+    models_dir.mkdir(parents=True, exist_ok=True)
+    return [p for p in models_dir.iterdir() if p.is_file() and p.suffix.lower() == '.pth']
 
 def predict(model: VoiceClassifyModel, device: torch.device, voice_file: UploadedFile) -> tuple[Tensor, float]:
     """Predict the voice file by pretrained model.
@@ -48,9 +54,19 @@ def predict(model: VoiceClassifyModel, device: torch.device, voice_file: Uploade
     return prob, pred
 
 
-def app_entry(model: VoiceClassifyModel, device: torch.device):
+def app_entry(model_list: list[Path], device: torch.device):
     st.title("Voice Classification")
 
+
+
+    # Choose Model
+    selected_model = st.selectbox(
+        label='Select classify model',
+        options=read_all_model(Path(MODELS_DIR)),
+    )
+    model = load_saved_model(selected_model, device)
+
+    # Upload/Record voice
     input_c1, input_c2 = st.columns([1, 1])
     upload_file = record_file = None
 
@@ -61,7 +77,7 @@ def app_entry(model: VoiceClassifyModel, device: torch.device):
             st.success('Record success!')
 
     with input_c2:
-        upload_file = st.file_uploader(label='Voice file', type=['mp3', 'wav', 'aac'])
+        upload_file = st.file_uploader(label='or upload voice file', type=['mp3', 'wav', 'aac'])
         if upload_file:
             st.success('Upload success!')
 
@@ -72,9 +88,10 @@ def app_entry(model: VoiceClassifyModel, device: torch.device):
 
     voice_file = record_file if select_source == 'Record' else upload_file
 
+    # Analyze Voice gender
     if st.button('Analyze', type='primary'):
         if not voice_file:
-            st.error('Please record a voice or upload the voice file.')
+            st.error('Please record or upload the voice file.')
             return
 
         prob, pred = predict(model, device, voice_file)
@@ -107,8 +124,8 @@ def app_entry(model: VoiceClassifyModel, device: torch.device):
 
 
 def main():
-    model, device = load_saved_model(Path('model/model_state_data_count_5000.pth'))
-    app_entry(model, device)
+    device = torch.device(device_detected())
+    app_entry(read_all_model(Path(MODELS_DIR)), device)
 
 
 if __name__ == '__main__':

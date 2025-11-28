@@ -56,8 +56,8 @@ class DataManager:
         train_samples, valid_samples = self.train_val_split(samples, valid_ratio)
         train_ds = VoiceDataset(train_samples, self.processor, cache_specs=cache_specs)
         valid_ds = VoiceDataset(valid_samples, self.processor, cache_specs=cache_specs)
-        train_dl = DataLoader(train_ds, batch_size, shuffle=True, num_workers=4)
-        valid_dl = DataLoader(valid_ds, batch_size, shuffle=False, num_workers=4)
+        train_dl = DataLoader(train_ds, batch_size, shuffle=True)
+        valid_dl = DataLoader(valid_ds, batch_size, shuffle=False)
         return train_dl, valid_dl
 
 if __name__ == '__main__':

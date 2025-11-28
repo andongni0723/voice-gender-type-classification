@@ -5,7 +5,7 @@ import src.model_eval as model_eval
 from src.data_manager import DataManager
 from src.spec_process import SpectrogramProcessor
 
-MODEL_SAVE_PATH = 'model/model_state_data_count_5000.pth'
+MODEL_SAVE_PATH = 'model/model_state_data.pth'
 
 def main():
     device = train.device_detected()

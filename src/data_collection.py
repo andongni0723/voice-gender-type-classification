@@ -24,7 +24,7 @@ class VoiceDataset(Dataset):
         self.samples = samples
         self.processor = processor
         self.label_to_id = label_dict
-        self._specs_cache: dict[int, tuple[Tensor, Tensor]] = {} if cache_specs else None
+        self._specs_cache: dict[int, tuple[Tensor, Tensor]] | None = {} if cache_specs else None
         """Save the sample and label cache, reduce transform tensor times."""
 
     def __len__(self):
@@ -32,11 +32,11 @@ class VoiceDataset(Dataset):
 
     def __getitem__(self, idx: int) -> tuple[Tensor, Tensor]:
         sample = self.samples[idx]
-        if self._specs_cache and idx in self._specs_cache: # Check data exist
+        if self._specs_cache is not None and idx in self._specs_cache:  # Check data exist
             spec, label = self._specs_cache[idx]
         else:
             spec = self.processor.transform_to_tensor(sample.waveform)
             label = torch.tensor(self.label_to_id[sample.label], dtype=torch.long)
-            if self._specs_cache:
+            if self._specs_cache is not None:
                 self._specs_cache[idx] = (spec, label)
         return spec, label
